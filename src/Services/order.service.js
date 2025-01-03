@@ -76,34 +76,67 @@ const getOrders = async () => {
   return data; // Assuming the API returns an object with an orders array
 };
 
-const updateOrderStatus = async (order_hash, updatedServices, order_status, token) => { 
-  const requestOptions = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": token,
-    },
-    body: JSON.stringify({
-      order_hash,        // Order identifier (hash)
-      service_completed: updatedServices, // Array of updated service statuses
-      order_status,      // The overall order status (0 for In Progress, 1 for Completed)
-    }),
-  };
+const updateOrderStatus = async (order_hash, orderDetails, token) => {
+   const requestOptions = {
+      method: "PUT",
+      headers: {
+         "Content-Type": "application/json",
+         "x-access-token": token,
+      },
+      body: JSON.stringify({
+         order_id: orderDetails.order_id, // Include order_id explicitly
+         service_completed: orderDetails.service_completed, // Array of updated service statuses
+         order_status: orderDetails.order_status, // The overall order status (0 for In Progress, 1 for Completed)
+      }),
+   };
 
-  try {
-    const response = await fetch(
-      `${api_url}/api/order`,
-      requestOptions
-    );
-    console.log(response);
-    
-    return response; // Return the successful response data
-  } catch (error) {
-    console.log(error);
-    
-    // throw new Error(error.message || "Failed to update order status.");
-  }
+   try {
+      const response = await fetch(
+         `${api_url}/api/order/update-order/${order_hash}`,
+         requestOptions
+      );
+
+      if (!response.ok) {
+         throw new Error(`Failed with status code: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("Order status update response:", responseData);
+      return responseData; // Return the successful response data
+   } catch (error) {
+      console.error("Failed to update order status:", error);
+      throw new Error(error.message || "Failed to update order status.");
+   }
 };
+
+// const updateOrderStatus = async (order_hash, updatedServices, order_status, token) => { 
+//   const requestOptions = {
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "x-access-token": token,
+//     },
+//     body: JSON.stringify({
+//       order_hash,        // Order identifier (hash)
+//       service_completed: updatedServices, // Array of updated service statuses
+//       order_status,      // The overall order status (0 for In Progress, 1 for Completed)
+//     }),
+//   };
+
+//   try {
+//     const response = await fetch(
+//       `${api_url}/api/order`,
+//       requestOptions
+//     );
+//     console.log(response);
+    
+//     return response; // Return the successful response data
+//   } catch (error) {
+//     console.log(error);
+    
+//     // throw new Error(error.message || "Failed to update order status.");
+//   }
+// };
 export default {
   createNewOrder,
   getSingleCustomerOrders,
