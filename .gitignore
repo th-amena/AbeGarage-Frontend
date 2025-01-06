@@ -9,6 +9,6 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 node_modules/
-.env
-.env.production
+//.env
+//.env.production
 .idea
