@@ -1,7 +1,7 @@
 
 
 /node_modules
-
+dist/
 dist-ssr
 
 
@@ -11,4 +11,4 @@ dist-ssr
 node_modules/
 idea
 .env
-.env.production
+.env.productiondist/
