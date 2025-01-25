@@ -27,7 +27,7 @@ import OrderDetailsPage from "./Markup/Pages/Admin/OrderDetailsPage/OrderDetails
 import CustomerProfile from "./Markup/Pages/Admin/Customer/CustomerProfile/CustomerProfile";
 import CustomerList from "./Markup/Pages/Admin/Customer/CustomerList/CustomerList";
 import SelectVehicle from "./Markup/Pages/Admin/SelectVehicle/SelectVehicle";
-import CreateOrder from "./Markup/pages/Admin/CreateOrder/CreateOrder";
+import CreateOrder from "./Markup/Pages/Admin/CreateOrder/CreateOrder";
 import VehicleUpdate from "./Markup/Pages/Admin/VehicleUpdate/VehicleUpdate";
 import OrderStatusPage from "./Markup/Pages/Admin/UpdateOrderStatus/OrderStatusPage";
 
