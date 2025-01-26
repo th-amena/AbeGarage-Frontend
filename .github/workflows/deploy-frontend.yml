@@ -19,14 +19,21 @@ jobs:
         with:
           node-version: 20.18.0
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
         run: npm install
+
+      - name: Verify File Structure
+        run: ls -R src
 
       - name: Build the project
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
           npm run build
+
+      - name: Verify Build Output
+        run: ls -R dist
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@v0.1.3
@@ -34,8 +41,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "./dist/*"
+          source: "./dist/"
           target: "/var/www/abegarage2024.com/frontend/dist/"
+          rm: true
 
       - name: Restart Apache
         run: |
