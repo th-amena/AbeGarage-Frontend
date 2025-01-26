@@ -24,20 +24,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Verify File Structure
-        run: ls -R src
-
       - name: Build the project
         run: |
-          if [ "$CI" = "true" ]; then
-            echo "CI environment detected, skipping browser-specific code like localStorage access"
-          else
-            echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
-            npm run build
-          fi
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
+          npm run build
 
       - name: Verify Build Output
-        run: ls -R dist
+        run: |
+          if [ -d "dist" ]; then
+            echo "Build successful, dist folder exists."
+          else
+            echo "Build failed, dist folder does not exist."
+            exit 1
+          fi
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@v0.1.3
