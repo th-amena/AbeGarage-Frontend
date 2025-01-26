@@ -40,13 +40,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ./ec2_key.pem
-          source: "./dist/*"
-          target: "/var/www/abegarage2024.com/frontend/dist/"
-          rm: true
-          port: 22
-          timeout: 30s
-          command_timeout: 10m
-          use_insecure_cipher: false
+          source: ./dist/*
+          target: /var/www/abegarage2024.com/frontend/dist/
 
       - name: Restart Apache
         run: |
