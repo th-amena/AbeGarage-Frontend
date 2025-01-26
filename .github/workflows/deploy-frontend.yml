@@ -11,43 +11,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.18.0
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
 
+      # Step 3: Clean npm cache
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Step 5: Verify File Structure
+      - name: Verify File Structure Before Build
+        run: |
+          echo "Listing all files in the src directory:"
+          ls -R src
+
+      # Step 6: Build the project
       - name: Build the project
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
           npm run build
 
+      # Step 7: Verify Build Output
       - name: Verify Build Output
+        if: success()
         run: |
-          if [ -d "dist" ]; then
-            echo "Build successful, dist folder exists."
-          else
-            echo "Build failed, dist folder does not exist."
-            exit 1
-          fi
+          echo "Listing all files in the dist directory:"
+          ls -R dist
 
+      # Step 8: Deploy to EC2
       - name: Deploy to EC2
+        if: success()
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "./dist/"
+          source: "./dist/*"
           target: "/var/www/abegarage2024.com/frontend/dist/"
           rm: true
 
+      # Step 9: Restart Apache
       - name: Restart Apache
+        if: success()
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "sudo systemctl restart apache2"
