@@ -33,18 +33,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Retrieve the logged-in user from local storage
-    const loggedInEmployee = getAuth();
-    loggedInEmployee.then((response) => {
-      if (response.employee_token) {
-        setIsLogged(true);
-        // 3 is the employee_role for admin
-        if (response.employee_role === 3) {
-          setIsAdmin(true);
-        }
-        setEmployee(response);
-      }
-    });
+     if (typeof window !== "undefined" && localStorage) {
+        const loggedInEmployee = getAuth();
+        loggedInEmployee.then((response) => {
+           if (response.employee_token) {
+              setIsLogged(true);
+              if (response.employee_role === 3) {
+                 setIsAdmin(true);
+              }
+              setEmployee(response);
+           }
+        });
+     }
   }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
