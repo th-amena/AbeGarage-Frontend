@@ -1,7 +1,10 @@
 // Function to read the data from the user's local storage
 const getAuth = async () => {
-   // Check if localStorage is available
-   if (typeof window !== "undefined" && window.localStorage) {
+   // Ensure we're in a browser environment and localStorage is available
+   if (
+      typeof window !== "undefined" &&
+      typeof window.localStorage !== "undefined"
+   ) {
       const employee = await JSON.parse(localStorage.getItem("employee"));
       if (employee && employee.employee_token) {
          const decodedToken = await decodeTokenPayload(employee.employee_token);
