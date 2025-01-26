@@ -33,7 +33,13 @@ jobs:
         run: |
           echo "-----BEGIN RSA PRIVATE KEY-----\n${{ secrets.EC2_KEY }}\n-----END RSA PRIVATE KEY-----" > ec2_key.pem
           chmod 600 ec2_key.pem
+          cat ec2_key.pem  # Debugging: Show the private key content (ensure it’s not empty)
 
+      - name: Verify the Private Key
+        run: |
+          # Debugging: Try to check the key format and print the first few lines
+          head -n 5 ec2_key.pem
+          
       - name: Deploy to EC2
         uses: appleboy/scp-action@v0.1.3
         with:
@@ -47,7 +53,7 @@ jobs:
           timeout: 30s
           command_timeout: 10m
           use_insecure_cipher: false
-          debug: false
+          debug: true
 
       - name: Restart Apache
         run: |
