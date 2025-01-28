@@ -22,7 +22,8 @@ const About24 = () => {
           </div>
           <div className="col-lg-7 pl-lg-5">
             <div className="sec-title">
-              <h5>Welcome to AbeGarage Workshop</h5>
+              
+              <h5>Welcome to Our AbeGarage Workshop</h5>
               <h2>We have 24 years experience</h2>
               <div className="text">
                 <p>
